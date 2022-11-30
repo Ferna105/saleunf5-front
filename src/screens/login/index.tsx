@@ -5,9 +5,13 @@ import {styles} from './styles';
 
 export const Login = () => {
   return (
-    <Container>
-      <View style={styles.container}>
-        <Text>Home Screen</Text>
+    <Container style={styles.container}>
+      <Text>Iniciar sesión</Text>
+      <View>
+        <Text>Usuario</Text>
+      </View>
+      <View>
+        <Text>Contraseña</Text>
       </View>
     </Container>
   );
