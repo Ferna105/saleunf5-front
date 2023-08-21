@@ -3,7 +3,7 @@ import {View} from 'react-native';
 
 import {ReactElement} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
-import {styles} from './styles';
+import {styles} from './container.styles';
 
 interface ContainerProps {
   children: ReactElement | ReactElement[];

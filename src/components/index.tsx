@@ -1,2 +1,2 @@
-export {Text} from './text';
-export {Container} from './container';
+export {Text} from './Text/text.component';
+export {Container} from './Container/container.component';

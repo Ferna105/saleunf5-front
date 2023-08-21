@@ -5,6 +5,7 @@ import {styles} from './styles';
 
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {authenticate} from 'services/auth.services';
 
 export const Login = () => {
   GoogleSignin.configure({
@@ -20,6 +21,8 @@ export const Login = () => {
       .signInWithCredential(googleCredential)
       .then(user => {
         console.log({user});
+
+        authenticate({user: 'mat', password: 'zapillon'});
       })
       .catch(error => console.log(error));
   };
