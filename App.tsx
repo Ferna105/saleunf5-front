@@ -10,6 +10,7 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Login} from 'screens/login';
 import messaging from '@react-native-firebase/messaging';
+import {AuthProvider} from 'contexts/auth.context';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,9 +27,11 @@ function App() {
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
-      </Stack.Navigator>
+      <AuthProvider>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+      </AuthProvider>
     </NavigationContainer>
   );
 }
