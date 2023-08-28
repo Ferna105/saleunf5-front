@@ -11,4 +11,5 @@ export const styles = StyleSheet.create({
   icon: {
     marginRight: Sizing.S,
   },
+  text: {fontWeight: 'bold'},
 });

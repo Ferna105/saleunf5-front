@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 
 import {ReactElement} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
@@ -11,5 +11,9 @@ interface ContainerProps {
 }
 
 export const Container = ({children, style}: ContainerProps) => {
-  return <View style={[style, styles.container]}>{children}</View>;
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={[style, styles.container]}>{children}</View>
+    </SafeAreaView>
+  );
 };

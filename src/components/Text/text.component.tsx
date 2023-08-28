@@ -8,6 +8,7 @@ import {TextProps} from './text.interfaces';
 export const Text = ({
   style,
   fontSize = 'M',
+  fontWeight = 'normal',
   color = 'text',
   ...props
 }: TextDefaultProps & TextProps) => {
@@ -16,7 +17,14 @@ export const Text = ({
   return (
     <TextBase
       {...props}
-      style={[style, {color: colors[color], fontSize: Sizing[fontSize]}]}
+      style={[
+        style,
+        {
+          color: colors[color],
+          fontSize: Sizing[fontSize],
+          fontWeight: fontWeight,
+        },
+      ]}
     />
   );
 };

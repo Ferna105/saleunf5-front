@@ -1,18 +1,20 @@
 import React, {useContext, useState} from 'react';
 import {Container, Text, TextInput} from 'components';
 import {View} from 'react-native';
-import {styles} from './styles';
+import {styles} from './login.styles';
 
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {authenticate} from 'services/auth.services';
 import {AuthContext} from 'contexts/auth.context';
 import {Separator} from 'components/Separator/separator.component';
 import {Sizing} from 'utils/sizing';
 import {Button} from 'components';
+import {useServices} from 'services/services.hook';
 
 export const Login = () => {
   const {setAuthToken} = useContext(AuthContext);
+  const {authService} = useServices();
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -21,26 +23,40 @@ export const Login = () => {
       '325980594852-ar53h789aia7pubkrmjr4td26m6b28c2.apps.googleusercontent.com',
   });
 
+  const onPressLogin = async () => {
+    authService
+      .authenticate({username: username, password: password})
+      .then(response => {
+        if (response.status === 'SUCCESS') {
+          setAuthToken(response.data?.authToken ?? '');
+        }
+      });
+  };
+
   const onPressGoogleBtn = async () => {
     const {idToken} = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     auth()
       .signInWithCredential(googleCredential)
       .then(() => {
-        authenticate({username: username, password: password}).then(
-          response => {
+        authService
+          .authenticate({username: 'matias', password: 'zapillon'})
+          .then(response => {
             if (response.status === 'SUCCESS') {
               setAuthToken(response.data?.authToken ?? '');
             }
-          },
-        );
+          });
       })
       .catch(error => console.log(error));
   };
 
   return (
     <Container style={styles.container}>
-      <Text fontSize="L" color="text" style={{marginBottom: Sizing.M}}>
+      <Text
+        fontSize="XXL"
+        color="text"
+        style={{marginBottom: Sizing.M}}
+        fontWeight="bold">
         Iniciar sesión
       </Text>
       <View style={styles.inputContainer}>
@@ -63,11 +79,12 @@ export const Login = () => {
           secureTextEntry
         />
       </View>
+      <Button onPress={onPressLogin} text="Iniciar sesión" type="PRIMARY" />
       <Separator />
       <Button
         onPress={onPressGoogleBtn}
         text="Iniciar sesión con Google"
-        type="TERTIARY"
+        type="SECONDARY"
         icon="Google"
       />
     </Container>

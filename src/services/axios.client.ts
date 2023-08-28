@@ -1,17 +1,29 @@
 import axios from 'axios';
+import {AuthContext} from 'contexts/auth.context';
+import {useContext, useEffect} from 'react';
 
-const axiosInstance = axios.create();
+const axiosClient = axios.create();
 
-axiosInstance.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    if (error.response.status === 401) {
-      //TODO: Manejar 401 para refresh token
-    }
-    return Promise.reject(error);
-  },
-);
+export const useAxiosClient = () => {
+  const {setAuthToken} = useContext(AuthContext);
 
-export {axiosInstance};
+  useEffect(() => {
+    axiosClient.interceptors.response.use(
+      response => {
+        return response;
+      },
+      error => {
+        /**
+         * TODO: LOGOUT POR SESIÖN EXPIRADA
+         */
+        console.log({error});
+        if (error.response.status === 401) {
+          setAuthToken('');
+        }
+        return Promise.reject(error);
+      },
+    );
+  }, [setAuthToken]);
+
+  return {axiosClient};
+};

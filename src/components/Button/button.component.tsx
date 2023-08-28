@@ -39,7 +39,7 @@ export const Button = ({
       text: keyof ColorsPallete;
     };
   } = {
-    [ButtonTypes.PRIMARY]: {background: colors.primary, text: 'text'},
+    [ButtonTypes.PRIMARY]: {background: colors.primary, text: 'background'},
     [ButtonTypes.SECONDARY]: {background: colors.card, text: 'text'},
     [ButtonTypes.TERTIARY]: {background: colors.text, text: 'background'},
   };
@@ -55,8 +55,10 @@ export const Button = ({
           borderRadius: Sizing.XXS,
         },
       ]}>
-      {icon && <Icon name={icon} style={styles.icon} />}
-      <Text color={typeColors[type].text}>{text}</Text>
+      {icon && <Icon size="XXL" name={icon} style={styles.icon} />}
+      <Text style={styles.text} color={typeColors[type].text} fontWeight="bold">
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
