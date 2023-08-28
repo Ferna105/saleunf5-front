@@ -1,9 +1,22 @@
 import React from 'react';
 import {useTheme} from '@react-navigation/native';
-import {Text as TextBase, TextProps} from 'react-native';
+import {Text as TextBase, TextProps as TextDefaultProps} from 'react-native';
+import {Sizing} from 'utils/sizing';
+import {ITheme} from 'utils/colors';
+import {TextProps} from './text.interfaces';
 
-export const Text = ({style, ...props}: TextProps) => {
-  const {colors} = useTheme();
+export const Text = ({
+  style,
+  fontSize = 'M',
+  color = 'text',
+  ...props
+}: TextDefaultProps & TextProps) => {
+  const {colors}: ITheme = useTheme();
 
-  return <TextBase {...props} style={[style, {color: colors.text}]} />;
+  return (
+    <TextBase
+      {...props}
+      style={[style, {color: colors[color], fontSize: Sizing[fontSize]}]}
+    />
+  );
 };
