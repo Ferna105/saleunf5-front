@@ -4,8 +4,9 @@ import {useContext} from 'react';
 import {ServiceContext} from 'contexts/service.context';
 
 interface AuthenticateServiceParams {
-  username: string;
-  password: string;
+  username?: string;
+  password?: string;
+  idToken?: string;
 }
 
 interface AuthenticateServiceResponse extends ServiceResponse {
@@ -18,11 +19,13 @@ export const useAuthService = () => {
   const authenticate = async ({
     username,
     password,
+    idToken,
   }: AuthenticateServiceParams): Promise<AuthenticateServiceResponse> => {
     try {
       const response = await client.post(services.API_V1.auth.authenticate, {
         username,
         password,
+        idToken,
       });
 
       return {data: {authToken: response.data}, status: 'SUCCESS'};

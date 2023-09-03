@@ -22,6 +22,7 @@ const ServiceProvider: React.FC<PropsWithChildren> = ({children}) => {
         return response;
       },
       error => {
+        console.log({interceptoError: error});
         /**
          * TODO: LOGOUT POR SESIÖN EXPIRADA
          */

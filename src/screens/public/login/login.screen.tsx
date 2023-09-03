@@ -24,31 +24,29 @@ export const Login = () => {
   });
 
   const onPressLogin = async () => {
-    authService
-      .authenticate({username: username, password: password})
-      .then(response => {
-        if (response.status === 'SUCCESS') {
-          setAuthToken(response.data?.authToken ?? '');
-        }
-      });
+    const authResponse = await authService.authenticate({
+      username: username,
+      password: password,
+    });
+    if (authResponse.status === 'SUCCESS') {
+      setAuthToken(authResponse.data?.authToken ?? '');
+    }
   };
 
   const onPressGoogleBtn = async () => {
-    const {idToken} = await GoogleSignin.signIn();
-    console.log(idToken);
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    auth()
-      .signInWithCredential(googleCredential)
-      .then(() => {
-        authService
-          .authenticate({username: 'matias', password: 'zapillon'})
-          .then(response => {
-            if (response.status === 'SUCCESS') {
-              setAuthToken(response.data?.authToken ?? '');
-            }
-          });
-      })
-      .catch(error => console.log(error));
+    try {
+      const {idToken} = await GoogleSignin.signIn();
+      if (!idToken) {
+        return;
+      }
+
+      const authResponse = await authService.authenticate({idToken: idToken});
+      if (authResponse.status === 'SUCCESS') {
+        setAuthToken(authResponse.data?.authToken ?? '');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
