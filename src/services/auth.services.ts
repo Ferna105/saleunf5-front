@@ -1,6 +1,7 @@
 import {services} from './services.constants';
-import {useAxiosClient} from './axios.client';
 import {ServiceResponse} from './services.interfaces';
+import {useContext} from 'react';
+import {ServiceContext} from 'contexts/service.context';
 
 interface AuthenticateServiceParams {
   username: string;
@@ -12,20 +13,17 @@ interface AuthenticateServiceResponse extends ServiceResponse {
 }
 
 export const useAuthService = () => {
-  const {axiosClient} = useAxiosClient();
+  const client = useContext(ServiceContext);
 
   const authenticate = async ({
     username,
     password,
   }: AuthenticateServiceParams): Promise<AuthenticateServiceResponse> => {
     try {
-      const response = await axiosClient.post(
-        services.API_V1.auth.authenticate,
-        {
-          username,
-          password,
-        },
-      );
+      const response = await client.post(services.API_V1.auth.authenticate, {
+        username,
+        password,
+      });
 
       return {data: {authToken: response.data}, status: 'SUCCESS'};
     } catch (error) {

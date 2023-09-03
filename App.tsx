@@ -10,6 +10,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {AuthProvider} from 'contexts/auth.context';
 import {Navigator} from './src/navigation';
+import {ServiceProvider} from 'contexts/service.context';
 
 function App() {
   const scheme = useColorScheme();
@@ -25,7 +26,9 @@ function App() {
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>
-        <Navigator />
+        <ServiceProvider>
+          <Navigator />
+        </ServiceProvider>
       </AuthProvider>
     </NavigationContainer>
   );
