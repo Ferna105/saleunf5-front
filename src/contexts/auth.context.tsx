@@ -1,9 +1,11 @@
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import React, {
   createContext,
   useReducer,
   useCallback,
   useMemo,
   PropsWithChildren,
+  useEffect,
 } from 'react';
 
 interface AuthState {
@@ -49,6 +51,7 @@ const AuthContext = createContext<AuthContextType>({
 
 const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const {setItem, getItem} = useAsyncStorage('authToken');
 
   const setAuthToken = useCallback(
     (authToken: string): void => {
@@ -67,6 +70,21 @@ const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
       setAuthToken,
     };
   }, [state.authToken, setAuthToken]);
+
+  useEffect(() => {
+    if (state.authToken) {
+      setItem(state.authToken);
+    }
+  }, [setItem, state.authToken]);
+
+  useEffect(() => {
+    getItem().then(value => {
+      if (value) {
+        setAuthToken(value);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

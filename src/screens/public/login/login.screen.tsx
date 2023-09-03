@@ -3,7 +3,6 @@ import {Container, Text, TextInput} from 'components';
 import {View} from 'react-native';
 import {styles} from './login.styles';
 
-import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {AuthContext} from 'contexts/auth.context';
 import {Separator} from 'components/Separator/separator.component';
