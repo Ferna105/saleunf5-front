@@ -9,8 +9,9 @@ import {Separator} from 'components/Separator/separator.component';
 import {Sizing} from 'utils/sizing';
 import {Button} from 'components';
 import {useServices} from 'services/services.hook';
+import {RootStackScreenProps} from 'navigation/types';
 
-export const Login = () => {
+export const Login = ({}: RootStackScreenProps<'Login'>) => {
   const {setAuthToken} = useContext(AuthContext);
   const {authService} = useServices();
 

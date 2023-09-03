@@ -4,6 +4,9 @@ const API_V1 = {
   auth: {
     authenticate: API_URL + '/api/v1/auth/authenticate',
   },
+  matches: {
+    search: API_URL + '/api/v1/matches/search',
+  },
 };
 
 export const services = {API_V1};

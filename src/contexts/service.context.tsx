@@ -13,10 +13,15 @@ const axiosInstance = axios.create();
 const ServiceContext = createContext<AxiosInstance>(axiosInstance);
 
 const ServiceProvider: React.FC<PropsWithChildren> = ({children}) => {
-  const {setAuthToken} = useContext(AuthContext);
+  const {setAuthToken, authToken} = useContext(AuthContext);
   const client = useRef(axiosInstance);
 
   useEffect(() => {
+    client.current.interceptors.request.use(request => {
+      request.headers.Authorization = `Bearer ${authToken}`;
+      return request;
+    });
+
     client.current.interceptors.response.use(
       response => {
         return response;
@@ -32,7 +37,7 @@ const ServiceProvider: React.FC<PropsWithChildren> = ({children}) => {
         return Promise.reject(error);
       },
     );
-  }, [setAuthToken]);
+  }, [setAuthToken, authToken]);
 
   return (
     <ServiceContext.Provider value={client.current}>

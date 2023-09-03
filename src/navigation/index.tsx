@@ -2,10 +2,11 @@ import React, {useContext} from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Login} from 'screens/public/login/login.screen';
-import {Home} from 'screens/private/home/home.screen';
 import {AuthContext} from 'contexts/auth.context';
+import {RootStackParamList} from './types';
+import {HomeTabs} from 'screens/private/homeTabs/homeTabs.screen';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigator = () => {
   const {authToken} = useContext(AuthContext);
@@ -14,8 +15,8 @@ export const Navigator = () => {
     <Stack.Navigator>
       {authToken ? (
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="HomeTabs"
+          component={HomeTabs}
           options={{headerShown: false}}
         />
       ) : (
