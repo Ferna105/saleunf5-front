@@ -15,8 +15,8 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
   const {setAuthToken} = useContext(AuthContext);
   const {authService} = useServices();
 
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [username, setUsername] = useState<string>('matias');
+  const [password, setPassword] = useState<string>('zapillon');
 
   GoogleSignin.configure({
     webClientId:
@@ -61,6 +61,7 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
       <View style={styles.inputContainer}>
         <TextInput
           autoCapitalize="none"
+          value={username}
           autoCorrect={false}
           autoComplete="off"
           onChangeText={setUsername}
@@ -69,6 +70,7 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
+          value={password}
           onChangeText={setPassword}
           placeholder="Contraseña"
           autoCorrect={false}

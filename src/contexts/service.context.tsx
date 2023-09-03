@@ -1,26 +1,23 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useRef,
-  useContext,
-} from 'react';
+import React, {createContext, PropsWithChildren, useContext} from 'react';
 import axios, {AxiosInstance} from 'axios';
 import {AuthContext} from './auth.context';
 
-const axiosInstance = axios.create();
+const client = axios.create();
 
-const ServiceContext = createContext<AxiosInstance>(axiosInstance);
+const ServiceContext = createContext<AxiosInstance>(client);
 
 const ServiceProvider: React.FC<PropsWithChildren> = ({children}) => {
   const {setAuthToken, authToken} = useContext(AuthContext);
-  const client = useRef(axiosInstance);
 
-  client.current.interceptors.request.use(request => {
-    request.headers.Authorization = `Bearer ${authToken}`;
+  client.interceptors.request.use(request => {
+    if (!request.headers.Authorization) {
+      request.headers.Authorization = `Bearer ${authToken}`;
+    }
+
     return request;
   });
 
-  client.current.interceptors.response.use(
+  client.interceptors.response.use(
     response => {
       return response;
     },
@@ -37,9 +34,7 @@ const ServiceProvider: React.FC<PropsWithChildren> = ({children}) => {
   );
 
   return (
-    <ServiceContext.Provider value={client.current}>
-      {children}
-    </ServiceContext.Provider>
+    <ServiceContext.Provider value={client}>{children}</ServiceContext.Provider>
   );
 };
 

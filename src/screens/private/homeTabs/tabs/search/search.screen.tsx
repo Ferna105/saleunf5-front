@@ -59,8 +59,8 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
         />
       </View>
       <View>
-        {matches.map(match => (
-          <View>
+        {matches.map((match, index) => (
+          <View key={index}>
             <Text>{match.address}</Text>
           </View>
         ))}
