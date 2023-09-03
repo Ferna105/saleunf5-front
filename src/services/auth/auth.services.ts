@@ -1,5 +1,5 @@
-import {services} from './services.constants';
-import {ServiceResponse} from './services.interfaces';
+import {services} from '../services.constants';
+import {ServiceResponse} from '../services.interfaces';
 import {useContext} from 'react';
 import {ServiceContext} from 'contexts/service.context';
 

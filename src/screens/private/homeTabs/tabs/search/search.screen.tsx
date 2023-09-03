@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {Button, Container, TextInput} from 'components';
+import {Button, Container, Text, TextInput} from 'components';
 import {HomeTabScreenProps} from 'navigation/types';
 import {View} from 'react-native';
 import {styles} from './search.styles';
 import {useServices} from 'services/services.hook';
+import {Match} from 'services/services.domain';
 
 export const Search = ({}: HomeTabScreenProps<'Search'>) => {
   const [radiusRange, setRadiusRange] = useState<string>('20000');
@@ -13,6 +14,8 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
   const [coordinates, setCoordinates] = useState<string>(
     '-34.28980413557108;-60.25665707354477',
   );
+
+  const [matches, setMatches] = useState<Array<Match>>([]);
 
   const {matchesService} = useServices();
 
@@ -24,7 +27,11 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
         matchStartDate: matchStartDate,
         radiusRange: radiusRange,
       })
-      .then(result => console.log(result));
+      .then(result => {
+        if (result.data?.length) {
+          setMatches(result.data);
+        }
+      });
   };
 
   return (
@@ -50,6 +57,13 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
           value={coordinates}
           onChangeText={setCoordinates}
         />
+      </View>
+      <View>
+        {matches.map(match => (
+          <View>
+            <Text>{match.address}</Text>
+          </View>
+        ))}
       </View>
       <Button text="Buscar" type="PRIMARY" onPress={onPressSearchButton} />
     </Container>

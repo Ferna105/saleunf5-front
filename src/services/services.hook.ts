@@ -1,5 +1,5 @@
-import {useAuthService} from './auth.services';
-import {useMatchesService} from './matches.services';
+import {useAuthService} from './auth/auth.services';
+import {useMatchesService} from './matches/matches.services';
 
 export const useServices = () => {
   const authService = useAuthService();
