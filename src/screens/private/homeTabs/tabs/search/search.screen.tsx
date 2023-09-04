@@ -1,23 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Container, Text, TextInput} from 'components';
 import {HomeTabScreenProps} from 'navigation/types';
 import {View} from 'react-native';
 import {styles} from './search.styles';
 import {useServices} from 'services/services.hook';
 import {Match} from 'services/services.domain';
+import {useGeolocation} from 'hooks/useGeolocation.hook';
 
 export const Search = ({}: HomeTabScreenProps<'Search'>) => {
   const [radiusRange, setRadiusRange] = useState<string>('20000');
   const [sport, setSport] = useState<string>('FUTBOL');
   const [matchStartDate, setMatchStartDate] =
     useState<string>('05/05/2021 19:00');
-  const [coordinates, setCoordinates] = useState<string>(
-    '-34.28980413557108;-60.25665707354477',
-  );
+  const [coordinates, setCoordinates] = useState<string>('');
 
   const [matches, setMatches] = useState<Array<Match>>([]);
 
   const {matchesService} = useServices();
+  const {ok, latitude, longitude} = useGeolocation();
 
   const onPressSearchButton = () => {
     matchesService
@@ -33,6 +33,12 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
         }
       });
   };
+
+  useEffect(() => {
+    if (ok) {
+      setCoordinates(`${latitude};${longitude}`);
+    }
+  }, [ok, latitude, longitude]);
 
   return (
     <Container style={styles.container}>

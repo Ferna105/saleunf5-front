@@ -11,6 +11,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigator = () => {
   const {authToken} = useContext(AuthContext);
 
+  if (authToken === null) return <></>;
+
   return (
     <Stack.Navigator>
       {authToken ? (

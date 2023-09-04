@@ -1,17 +1,19 @@
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import React, {
   createContext,
   useReducer,
   useCallback,
   useMemo,
   PropsWithChildren,
+  useEffect,
 } from 'react';
 
 interface AuthState {
-  authToken: string;
+  authToken: string | null;
 }
 
 const initialState: AuthState = {
-  authToken: '',
+  authToken: null,
 };
 
 enum AuthActionTypes {
@@ -20,7 +22,7 @@ enum AuthActionTypes {
 
 interface SetAuthTokenAction {
   type: AuthActionTypes.SET_AUTH_TOKEN;
-  payload: string;
+  payload: string | null;
 }
 
 type AuthAction = SetAuthTokenAction;
@@ -38,20 +40,21 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 };
 
 interface AuthContextType {
-  authToken: string;
+  authToken: string | null;
   setAuthToken: (authToken: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  authToken: '',
+  authToken: null,
   setAuthToken: () => {},
 });
 
 const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const {getItem, setItem} = useAsyncStorage('@authToken');
 
   const setAuthToken = useCallback(
-    (authToken: string): void => {
+    (authToken: string | null): void => {
       const action: SetAuthTokenAction = {
         type: AuthActionTypes.SET_AUTH_TOKEN,
         payload: authToken,
@@ -67,6 +70,17 @@ const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
       setAuthToken,
     };
   }, [state.authToken, setAuthToken]);
+
+  useEffect(() => {
+    if (state.authToken === null) {
+      getItem().then(authToken => {
+        setAuthToken(authToken ?? '');
+      });
+    } else {
+      setItem(state.authToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setAuthToken, state.authToken]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
