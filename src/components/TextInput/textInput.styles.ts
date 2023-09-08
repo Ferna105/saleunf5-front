@@ -6,6 +6,9 @@ export const useStyles = () => {
   const {colors} = useTheme();
 
   const styles = StyleSheet.create({
+    container: {
+      width: '100%',
+    },
     textInputContainer: {
       flexDirection: 'row',
       width: '100%',
@@ -15,6 +18,9 @@ export const useStyles = () => {
       backgroundColor: colors.card,
       padding: Sizing.S,
       flex: 1,
+    },
+    labelContainer: {
+      marginBottom: Sizing.XXXS,
     },
   });
 

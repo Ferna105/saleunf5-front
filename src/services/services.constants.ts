@@ -5,6 +5,7 @@ const API_V1 = {
     authenticate: API_URL + '/api/v1/auth/authenticate',
   },
   matches: {
+    create: API_URL + '/api/v1/matches',
     search: API_URL + '/api/v1/matches/search',
   },
 };

@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Container, Text, TextInput} from 'components';
-import {HomeTabScreenProps} from 'navigation/types';
+import {HomeTabSearchTabScreenProps} from 'navigation/types';
 import {View} from 'react-native';
-import {styles} from './search.styles';
+import {styles} from './searchMatch.styles';
 import {useServices} from 'services/services.hook';
 import {Match} from 'services/services.domain';
 import {useGeolocation} from 'hooks/useGeolocation.hook';
 
-export const Search = ({}: HomeTabScreenProps<'Search'>) => {
+export const SearchMatch = ({}: HomeTabSearchTabScreenProps<'SearchMatch'>) => {
   const [radiusRange, setRadiusRange] = useState<string>('20000');
   const [sport, setSport] = useState<string>('FUTBOL');
   const [matchStartDate, setMatchStartDate] =
@@ -43,26 +43,36 @@ export const Search = ({}: HomeTabScreenProps<'Search'>) => {
   return (
     <Container style={styles.container}>
       <View>
-        <TextInput
-          placeholder="Radio"
-          value={radiusRange}
-          onChangeText={setRadiusRange}
-        />
-        <TextInput
-          placeholder="Deporte"
-          value={sport}
-          onChangeText={setSport}
-        />
-        <TextInput
-          placeholder="Fecha de comienzo del partido"
-          value={matchStartDate}
-          onChangeText={setMatchStartDate}
-        />
-        <TextInput
-          placeholder="Coordenadas"
-          value={coordinates}
-          onChangeText={setCoordinates}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Radio"
+            value={radiusRange}
+            onChangeText={setRadiusRange}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Deporte"
+            value={sport}
+            onChangeText={setSport}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Fecha de comienzo del partido"
+            value={matchStartDate}
+            onChangeText={setMatchStartDate}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Coordenadas"
+            value={coordinates}
+            onChangeText={setCoordinates}
+          />
+        </View>
       </View>
       <View>
         {matches.map((match, index) => (

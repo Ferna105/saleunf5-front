@@ -36,3 +36,5 @@ export interface MatchesSearchApiResponse {
     };
   };
 }
+
+export interface MatchesCreateApiResponse {} //TODO

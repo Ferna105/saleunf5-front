@@ -42,6 +42,8 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
 
       const authResponse = await authService.authenticate({idToken: idToken});
       if (authResponse.status === 'SUCCESS') {
+        console.log({authToken: authResponse.data?.authToken});
+
         setAuthToken(authResponse.data?.authToken ?? '');
       }
     } catch (error) {

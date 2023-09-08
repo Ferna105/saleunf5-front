@@ -1,5 +1,11 @@
-import {MatchesSearchApiResponse} from './matches.api.interfaces';
-import {MatchesSearchServiceResponse} from './matches.services.interfaces';
+import {
+  MatchesCreateApiResponse,
+  MatchesSearchApiResponse,
+} from './matches.api.interfaces';
+import {
+  MatchesCreateServiceResponse,
+  MatchesSearchServiceResponse,
+} from './matches.services.interfaces';
 
 export const mapMatchesSearchApiToService = (
   apiResponse: MatchesSearchApiResponse,
@@ -23,4 +29,11 @@ export const mapMatchesSearchApiToService = (
       };
     }),
   };
+};
+
+export const mapMatchesCreateApiToService = (
+  apiResponse: MatchesCreateApiResponse,
+): MatchesCreateServiceResponse => {
+  console.log(apiResponse);
+  return {status: 'SUCCESS', data: null};
 };
