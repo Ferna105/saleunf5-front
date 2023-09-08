@@ -36,6 +36,8 @@ export const CreateMatch = ({}: HomeTabSearchTabScreenProps<'CreateMatch'>) => {
       .then(result => {
         if (result.status === 'SUCCESS') {
           Alert.alert('Búsqueda creada');
+        } else {
+          Alert.alert('Falló la creación ');
         }
       });
   };

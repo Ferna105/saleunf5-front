@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Container, Text, TextInput} from 'components';
 import {HomeTabSearchTabScreenProps} from 'navigation/types';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {styles} from './searchMatch.styles';
 import {useServices} from 'services/services.hook';
 import {Match} from 'services/services.domain';
@@ -28,8 +28,12 @@ export const SearchMatch = ({}: HomeTabSearchTabScreenProps<'SearchMatch'>) => {
         radiusRange: radiusRange,
       })
       .then(result => {
-        if (result.data?.length) {
-          setMatches(result.data);
+        if (result.status === 'SUCCESS') {
+          if (result.data?.length) {
+            setMatches(result.data);
+          }
+        } else {
+          Alert.alert('Falló la búsqueda');
         }
       });
   };

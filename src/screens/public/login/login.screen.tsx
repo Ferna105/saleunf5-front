@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {Container, Text, TextInput} from 'components';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {styles} from './login.styles';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -30,6 +30,8 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
     });
     if (authResponse.status === 'SUCCESS') {
       setAuthToken(authResponse.data?.authToken ?? '');
+    } else {
+      Alert.alert('Error al loguearse con credenciales');
     }
   };
 
@@ -42,9 +44,9 @@ export const Login = ({}: RootStackScreenProps<'Login'>) => {
 
       const authResponse = await authService.authenticate({idToken: idToken});
       if (authResponse.status === 'SUCCESS') {
-        console.log({authToken: authResponse.data?.authToken});
-
         setAuthToken(authResponse.data?.authToken ?? '');
+      } else {
+        Alert.alert('Error al loguearse con Google');
       }
     } catch (error) {
       console.log(error);
