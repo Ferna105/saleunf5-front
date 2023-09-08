@@ -1,12 +1,20 @@
 import {services} from '../services.constants';
 import {useContext} from 'react';
 import {ServiceContext} from 'contexts/service.context';
-import {AuthAuthenticateApiResponse} from './auth.api.interfaces';
+import {
+  AuthAuthenticateApiResponse,
+  AuthRefreshTokenApiResponse,
+} from './auth.api.interfaces';
 import {
   AuthAuthenticateServiceParams,
   AuthAuthenticateServiceResponse,
+  AuthRefreshTokenServiceParams,
+  AuthRefreshTokenServiceResponse,
 } from './auth.services.interfaces';
-import {mapAuthAuthenticateApiToService} from './auth.services.mappers';
+import {
+  mapAuthAuthenticateApiToService,
+  mapAuthRefreshTokenApiToService,
+} from './auth.services.mappers';
 
 export const useAuthService = () => {
   const client = useContext(ServiceContext);
@@ -32,5 +40,19 @@ export const useAuthService = () => {
     }
   };
 
-  return {authenticate};
+  const refreshToken =
+    async ({}: AuthRefreshTokenServiceParams): Promise<AuthRefreshTokenServiceResponse> => {
+      try {
+        const response = await client.post<AuthRefreshTokenApiResponse>(
+          services.API_V1.auth.refreshToken,
+          {},
+        );
+
+        return mapAuthRefreshTokenApiToService(response.data);
+      } catch (error) {
+        return {status: 'ERROR', error};
+      }
+    };
+
+  return {authenticate, refreshToken};
 };

@@ -10,14 +10,17 @@ import React, {
 
 interface AuthState {
   authToken: string | null;
+  refreshToken: string | null;
 }
 
 const initialState: AuthState = {
   authToken: null,
+  refreshToken: null,
 };
 
 enum AuthActionTypes {
   SET_AUTH_TOKEN = 'SET_AUTH_TOKEN',
+  SET_REFRESH_TOKEN = 'SET_REFRESH_TOKEN',
 }
 
 interface SetAuthTokenAction {
@@ -25,7 +28,12 @@ interface SetAuthTokenAction {
   payload: string | null;
 }
 
-type AuthAction = SetAuthTokenAction;
+interface SetRefreshTokenAction {
+  type: AuthActionTypes.SET_REFRESH_TOKEN;
+  payload: string | null;
+}
+
+type AuthAction = SetAuthTokenAction | SetRefreshTokenAction;
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
@@ -33,6 +41,11 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return {
         ...state,
         authToken: action.payload,
+      };
+    case AuthActionTypes.SET_REFRESH_TOKEN:
+      return {
+        ...state,
+        refreshToken: action.payload,
       };
     default:
       return state;
@@ -42,16 +55,21 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 interface AuthContextType {
   authToken: string | null;
   setAuthToken: (authToken: string) => void;
+  refreshToken: string | null;
+  setRefreshToken: (refreshToken: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   authToken: null,
   setAuthToken: () => {},
+  refreshToken: null,
+  setRefreshToken: () => {},
 });
 
 const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const {getItem, setItem} = useAsyncStorage('@authToken');
+  const authTokenAsyncStorage = useAsyncStorage('@authToken');
+  const refreshTokenAsyncStorage = useAsyncStorage('@refreshToken');
 
   const setAuthToken = useCallback(
     (authToken: string | null): void => {
@@ -64,23 +82,47 @@ const AuthProvider: React.FC<PropsWithChildren> = ({children}) => {
     [dispatch],
   );
 
+  const setRefreshToken = useCallback(
+    (refreshToken: string | null): void => {
+      const action: SetRefreshTokenAction = {
+        type: AuthActionTypes.SET_REFRESH_TOKEN,
+        payload: refreshToken,
+      };
+      dispatch(action);
+    },
+    [dispatch],
+  );
+
   const contextValue = useMemo(() => {
     return {
       authToken: state.authToken,
       setAuthToken,
+      refreshToken: state.refreshToken,
+      setRefreshToken,
     };
-  }, [state.authToken, setAuthToken]);
+  }, [state.authToken, setAuthToken, state.refreshToken, setRefreshToken]);
 
   useEffect(() => {
     if (state.authToken === null) {
-      getItem().then(authToken => {
+      authTokenAsyncStorage.getItem().then(authToken => {
         setAuthToken(authToken ?? '');
       });
     } else {
-      setItem(state.authToken);
+      authTokenAsyncStorage.setItem(state.authToken);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setAuthToken, state.authToken]);
+
+  useEffect(() => {
+    if (state.refreshToken === null) {
+      refreshTokenAsyncStorage.getItem().then(refreshToken => {
+        setRefreshToken(refreshToken ?? '');
+      });
+    } else {
+      refreshTokenAsyncStorage.setItem(state.refreshToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setRefreshToken, state.refreshToken]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

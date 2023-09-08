@@ -4,3 +4,5 @@ export interface AuthAuthenticateApiResponse {
   expires_in: null;
   token_type: null;
 }
+
+export interface AuthRefreshTokenApiResponse {} //TODO
